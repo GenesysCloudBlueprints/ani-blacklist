@@ -1,8 +1,6 @@
-# Terminate an outbound voice call with no queue and place an external tag on the call for analytics and follow-up
+# Blacklisting Phone Numbers
 
-This Genesys Cloud Developer Blueprint explains how to set up Genesys Cloud to terminate an outbound voice call with no queue and place an external tag on the call for analytics and follow-up.
-
-When an Architect workflow receives a Communicate call trigger, multiple Genesys Cloud Public API calls are made to update the conversation with an External Tag and then terminate the call.
+This is a blueprint is a solution for idea INB-I-1146 (https://genesyscloud.ideas.aha.io/ideas/INB-I-1146). As we’ll setup a trigger to check if an ANI on a voice interaction is blacklisted and if it is, we’ll disconnect the call.
 
 ![Outbound Communicate call Genesys Cloud flow](blueprint/images/outbound-communicate-call-workflow.png "Genesys Cloud Outbound Communicate Call")
 
