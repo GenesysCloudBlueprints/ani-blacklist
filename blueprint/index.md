@@ -1,12 +1,12 @@
 ---
-title: Terminate outbound voice calls with no queue
-author: yuri.yeti
+title: Blacklisting Phone Numbers
+author: vishwa-mudigonda
 indextype: blueprint
 icon: blueprint
-image: images/TerminateCallNoQueue.gif
+image: /images/TerminateCallNoQueue.gif
 category: 4
 summary: |
-  This Genesys Cloud Developer Blueprint explains how to set up Genesys Cloud to terminate an outbound voice call with no queue and place an external tag on the call for analytics and follow-up.
+  This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on a voice interaction is blacklisted. If it is blacklisted, the call will be disconnected.
 ---
 :::{"alert":"primary","title":"About Genesys Cloud Blueprints","autoCollapse":false} 
 Genesys Cloud blueprints were built to help you jump-start building an application or integrating with a third-party partner. 
