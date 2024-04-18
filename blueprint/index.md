@@ -3,7 +3,7 @@ title: Blacklisting Phone Numbers
 author: vishwa-mudigonda
 indextype: blueprint
 icon: blueprint
-image: /images/TerminateCallNoQueue.gif
+image: /../images/TerminateCallNoQueue.gif
 category: 4
 summary: |
   This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on a voice interaction is blacklisted. If it is blacklisted, the call will be disconnected..
