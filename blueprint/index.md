@@ -124,10 +124,9 @@ To create a data action integration in Genesys Cloud:
 2. In Genesys Cloud, navigate to **Admin** > **Integrations** > **Actions** and click **Import**.
 3. Select the `Disconnect-Interaction.json` file and associate with "Disconnect Interaction" data action integration, which uses the Disconnect Interaction Public API OAuth client.
 4. click **Import Action**.
+5. Click **Save & Publish**
 
-   ![Import the Disconnect Voice Call data action](images/4BImportDisconnectVoiceCallDataAction.png "Import the Update Genesys Cloud User Presence data action")
-   ![Import the data action](images/4AImportDataActions.png "Import the data action")
-   ![Import the Update Genesys Cloud User Presence data action](images/4BImportPutConversationTagDataAction2.png "Import the Inbound Conversation Details data action")
+   ![create data action](images/import-data-actions.gif "create data action")
 
 ## Architect 
 
@@ -152,15 +151,11 @@ First import this workflow to your Genesys Cloud organization:
 5. Select the downloaded **Blacklist_v5-0.i3WorkFlow** file and click **Import**.
 
 6. Review your workflow. Click **Save** and then click **Publish**.
-   ![Import the workflow](images/AddWorkflow1.png "Import the workflow")
-   ![Name your workflow](images/NameWorkflow1.png "Name your workflow")
-   ![Import the workflow](images/ImportWorkflow1.png "Import the workflow")
-   ![Import your workflow file](images/SelectWorkflow1ImportFile.png "Import your workflow file")
-   ![Save your workflow](images/ImportedWorkflow1.png "Save your workflow")
+   ![Import the workflow](images/architect-workflows.gif "Import the workflow")
 
    **Note:** If you imported the `Blacklist_v5-0.i3WorkFlow` file, your workflow will look like the screenshot below. 
 
-   ![Save your workflow](images/ImportedWorkflow2.png "Save your workflow")
+   ![Save your workflow](images/full-architect-workflow.gif "Save your workflow")
 
 ## Triggers
 
