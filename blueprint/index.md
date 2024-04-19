@@ -16,7 +16,7 @@ When an Architect workflow receives a Communicate call trigger, multiple Genesys
 
 The following illustration shows the end-to-end user experience that this solution enables.
 
-![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
+![End-to-end user experience](images/ani-blacklist-demo.gif "End-to-end user experience")
 
 ## Solution components
 
