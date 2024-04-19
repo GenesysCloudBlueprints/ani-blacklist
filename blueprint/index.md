@@ -64,6 +64,7 @@ The following illustration shows the end-to-end user experience that this soluti
 2. First you will want to create a data table. Example name can be “Blacklist”. 
 2. You will then primarily need to have the Reference Key set as "ani". 
 3. Click "Save"
+
    ![create a data table](images/datatable.gif "create a data table")
 
 ### Add your Blacklist Numbers (to block incoming calls/queues)
