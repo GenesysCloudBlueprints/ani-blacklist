@@ -5,7 +5,6 @@ indextype: blueprint
 icon: blueprint
 image: images/CallBlacklist.gif
 category: 4
-
 summary: |
   This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on a voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This features prevents inbound unwanted or fraudelent calls.
 ---
@@ -13,7 +12,7 @@ This Genesys Cloud Developer Blueprint explains how to set up a trigger to check
  
 When an Architect workflow receives a Communicate call trigger, multiple Genesys Cloud Public API calls are made to assess if a blacklisted number is inbound calling and then terminate the call accordingly.
 
-![Outbound Communicate call Genesys Cloud flow](images/outbound-communicate-call-workflow.png "Genesys Cloud Outbound Communicate Call")
+![Outbound Communicate call Genesys Cloud flow](images/ani-blacklist-workflow.png "Genesys Cloud Outbound Communicate Call")
 
 The following illustration shows the end-to-end user experience that this solution enables.
 
@@ -204,7 +203,7 @@ NEED NEW IMAGE
 
    ![Configure Trigger Criteria](images/ConfigureTriggerCriteria.png "Configure Trigger Criteria")
 
-## You can now add numbers to the Blacklist Data Table under the ani column header and those callers will be disconnected when they try calling you.  
+### You can now add numbers to the Blacklist Data Table under the ani column header and those callers will be disconnected when they try calling you.  
 
 ## Additional resources
 
