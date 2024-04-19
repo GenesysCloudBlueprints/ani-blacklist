@@ -56,7 +56,8 @@ The following illustration shows the end-to-end user experience that this soluti
 8. Click **Save** to assign the appropriate permissions to your custom role.
 
    ![Add a custom role & set permissions](images/createRoles.gif "Add a custom role & set permissions")
-   <video src='images/createRoles.mp4' />
+   
+   <video src='images/createRoles1.mp4' width=1400/>
 
 ## Data Table
 
