@@ -5,24 +5,13 @@ indextype: blueprint
 icon: blueprint
 image: images/CallBlacklist.gif
 category: 4
+
 summary: |
   This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on a voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This features prevents inbound unwanted or fraudelent calls.
 ---
-:::{"alert":"primary","title":"About Genesys Cloud Blueprints","autoCollapse":false} 
-Genesys Cloud blueprints were built to help you jump-start building an application or integrating with a third-party partner. 
-Blueprints are meant to outline how to build and deploy your solutions, not a production-ready turn-key solution.
+This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on a voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This features prevents inbound unwanted or fraudelent calls.
  
-For more details on Genesys Cloud blueprint support and practices, 
-see our Genesys Cloud blueprint [FAQ](https://developer.genesys.cloud/blueprints/faq "Opens the Blueprint FAQ") sheet.
-:::
-
-This Genesys Cloud Developer Blueprint explains how to set up Genesys Cloud to terminate an outbound voice call with no queue and place an external tag on the call for analytics and follow-up.
-
-When an Architect workflow receives a Communicate call trigger, multiple Genesys Cloud Public API calls are made to update the conversation with an External Tag and then terminate the call.
-
-:::primary
-**Note:** Customers leveraging this blueprint MUST provide an alternate e911 solution for their agents as this blueprint cuts off the agents ability to make an outbound PSTN call without associating a queue to the outbound call.
-:::
+When an Architect workflow receives a Communicate call trigger, multiple Genesys Cloud Public API calls are made to assess if a blacklisted number is inbound calling and then terminate the call accordingly.
 
 ![Outbound Communicate call Genesys Cloud flow](images/outbound-communicate-call-workflow.png "Genesys Cloud Outbound Communicate Call")
 
@@ -34,8 +23,10 @@ The following illustration shows the end-to-end user experience that this soluti
 
 * **Genesys Cloud** - A suite of Genesys cloud services for enterprise-grade communications, collaboration, and contact center management. Contact center agents use the Genesys Cloud user interface.
 * **Genesys Cloud API** - A set of RESTful APIs that enables you to extend and customize your Genesys Cloud environment.
-* **Architect flows** - A flow in Architect, a drag and drop web-based design tool, dictates how Genesys Cloud handles inbound or outbound interactions.
+* **Data Table** - Provides the ability to save blacklisted phone numbers from inbound calling.
 * **Data Action** - Provides the integration point to invoke a third-party REST web service or AWS lambda.
+* **Architect flows** - A flow in Architect, a drag and drop web-based design tool, dictates how Genesys Cloud handles inbound or outbound interactions.
+* **Triggers** - Provides the ability for a data action and architect workflow to work cohisively to perform the task.
 * **CX as Code** - A Genesys Cloud Terraform provider that provides an interface for declaring core Genesys Cloud objects.
 
 ## Prerequisites
@@ -43,6 +34,8 @@ The following illustration shows the end-to-end user experience that this soluti
 ### Specialized knowledge
 
 * Administrator-level knowledge of Genesys Cloud
+* Expereince with REST API authentication
+* Experience with Postman
 
 ### Genesys Cloud account
 
@@ -50,97 +43,25 @@ The following illustration shows the end-to-end user experience that this soluti
 * The Master Admin role in Genesys Cloud. For more information, see [Roles and permissions overview](https://help.mypurecloud.com/?p=24360 "Opens the Roles and permissions overview article") in the Genesys Cloud Resource Center.
 * CX as Code. For more information, see [CX as Code](https://developer.genesys.cloud/devapps/cx-as-code/ "Goes to the CX as Code page") in the Genesys Cloud Developer Center.
 
-### Development tools running in your local environment
+## Configure Genesys Cloud
 
-* Terraform (the latest binary). For more information, see [Install Terraform](https://www.terraform.io/downloads.html "Goes to the Install Terraform page") on the Terraform website.
-
-## Implementation steps
-
-You may choose to implement Genesys Cloud objects via the UI or by using Terraform.
-* [Configure Genesys Cloud using Terraform](#configure-genesys-cloud-using-terraform)
-* [Configure Genesys Cloud manually](#configure-genesys-cloud-manually)
-
-### Download the repository containing the project files
-
-1. Clone the [terminate-voice-calls-with-no-queue repository](https://github.com/GenesysCloudBlueprints/terminate-voice-calls-with-no-queue "Goes to the terminate-voice-calls-with-no-queue repository") in GitHub.
-
-## Configure Genesys Cloud using Terraform
-
-If you want to allow Communicate/PBX calls between GC Users, use the **/terraform-with-pbx** folder; if not, use the **/terraform-without-pbx** folder.
-
-### Set up Genesys Cloud
-
-1. You need to set the following environment variables in a terminal window before you can run this project using the Terraform provider:
-
- * `GENESYSCLOUD_OAUTHCLIENT_ID` - This variable is the Genesys Cloud client credential grant Id that CX as Code executes against. 
- * `GENESYSCLOUD_OAUTHCLIENT_SECRET` - This variable is the Genesys Cloud client credential secret that CX as Code executes against. 
- * `GENESYSCLOUD_REGION` - This variable is the Genesys Cloud region in your organization.
-
-2. Set the environment variables in the folder where Terraform is running. 
-
-### Configure your Terraform build
-
-Set the following values in the **/terraform-{with/without}-pbx/dev.auto.tfvars** file, specific to your Genesys Cloud organization:
-
-* `client_id` - The value of your OAuth Client ID using Client Credentials to be used for the data action integration.
-* `client_secret`- The value of your OAuth Client secret using Client Credentials to be used for the data action integration.
-
-The following is an example of the dev.auto.tfvars file.
-
-```
-client_id       = "your-client-id"
-client_secret   = "your-client-secret"
-```
-
-### Run Terraform
-
-The blueprint solution is now ready for your organization to use. 
-
-1. Change to the **/terraform-with-pbx** or **/terraform-without-pbx** folder and issue the following commands:
-
-* `terraform init` - This command initializes a working directory containing Terraform configuration files.
-  
-* `terraform plan` - This command executes a trial run against your Genesys Cloud organization and displays a list of all the Genesys Cloud resources created. Review this list and ensure that you are comfortable with the plan before moving on to the next step.
-
-* `terraform apply --auto-approve` - This command creates and deploys the necessary objects in your Genesys Cloud account. The --auto-approve flag completes the required approval step before the command creates the objects.
-
-Once the `terraform apply --auto-approve` command has completed, you should see the output of the entire run along with the number of objects that Terraform successfully created. The following points should be remembered:
-
-* In this project, assume you are running using a local Terraform backing state. In this case, the `tfstate` files are created in the same folder where the project is running. It is not recommended to use local Terraform backing state files unless you are running from a desktop or are comfortable deleting files.
-
-* As long as you keep your local Terraform backing state projects, you can tear down this blueprint solution by changing to the `docs/terraform` folder. You can also issue a `terraform destroy --auto-approve` command. All objects currently managed by the local Terraform backing state are destroyed by this command.
-
-## Configure Genesys Cloud manually
-
-### Create custom roles for use with Genesys Cloud OAuth clients
-
-Create a custom role for use with a Genesys Cloud OAuth client with the following permissions.
-:::primary
-**Note:** Custom role 2 is only required if you would still like GC users to make Communicate/PBX calls to other GC users.
-:::
-
-| Roles           | Permissions | Role Name |
-|-----------------|-------------------------|---------|
-| Custom role 1 | **Conversation** > **Communication** > **Disconnect**, **Conversation** > **ExternalTag** > **Edit**  | Terminate Conversation Public API |
-| Custom role 2 | **Analytics** > **Conversation Detail** > **View** | Get Conversation Details Public API |
-
-To create a custom role in Genesys Cloud:
+### Create a custom role to use with Genesys Cloud OAuth clients
 
 1. Navigate to **Admin** > **Roles/Permissions** and click **Add Role**.
-
+2. Type a **Name** for your custom role. (Example: "Blacklist Callers")
+3. Search and select the **Integrations**>**Action**>**All Permissions** permissions
+4. Search and select the **OAuth**>**Client**>**All Permissions** permissions
+5. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
+6. Click **Save** to assign the appropriate permissions to your custom role.
    ![Add a custom role](images/createRole.png "Add a custom role")
 
-2. Enter the **Name** for your custom role.
+## Data Table
+1. First you will want to create a data table. Example name can be “Blacklist”. 
+2. You will then primarily need to have the Reference Key set as "ani". 
 
-   ![Name the custom role](images/nameCustomRole.png "Name the custom role")
+![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
 
-3. Search and select the required permission for each of the custom role.
-   ![Add permissions to the custom role](images/assignPermissionToCustomRole.png "Add permissions to the custom role")
-4. Click **Save** to assign the appropriate permission to your custom role.
-
-   :::primary
-   **Note:** Assign this custom role to your user before creating the Genesys Cloud OAuth client.
-   :::
+NOTE: Under the ani header column, you will store all the phone numbers you wish to block from incoming calls or queues.
 
 ### Create an OAuth client for use with a Genesys Cloud data action integration
 
