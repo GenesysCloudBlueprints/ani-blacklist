@@ -96,13 +96,14 @@ To create an OAuth Client in Genesys Cloud:
 
 3. Click **Save**. Copy the client ID and the client secret values for later use.
 
-   ![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
-   **Note:** Ensure that you copy the client ID and client secret values for each of the OAuth clients.
+   ![End-to-end user experience](images/OAuth.gif "End-to-end user experience")
+
+   **Note:** Ensure that you **copy the client ID and client secret values** for each of the OAuth clients.
 
 ### Add Genesys Cloud data action integration
 
 Add a Genesys cloud data action integration for each OAuth client being used with this blueprint to call the Genesys Cloud public API to:
-* Terminate an inbound blacklisted caller
+* Terminate the call of an inbound blacklisted caller
 
 To create a data action integration in Genesys Cloud:
 
@@ -115,12 +116,8 @@ To create a data action integration in Genesys Cloud:
 4. Enter the client ID and client secret that you saved for the Presence Public API [(OAuth Client 1)](#create-oauth-clients-for-use-with-genesys-cloud-data-action-integrations "Goes to the create an OAuth Client section"). Click **OK** and save the data action.
 
 5. Navigate to the Integrations page and set the presence data action integration to **Active**.
-   ![Genesys Cloud data actions integration](images/3AGenesysCloudDataActionInstall.png "Genesys Cloud data actions integration")
-   ![Rename the data action](images/3BRenameDataAction.png "Rename the data action")
-   ![Navigate to the OAuth credentials](images/3CAddOAuthCredentials.png "Navigate to the OAuth credentials")
-   ![Add OAuth client credentials](images/3DOAuthClientIDandSecret.png "Add OAuth client credentials")
-   ![Set the data integration to active](images/3ESetToActive.png "Set the data action integration to active")
-   NOTE: REPLACE ALL THESE SCREENSHOTS WITH GIF
+   ![create data action](images/create-data-action.gif "create data action")
+
 
 ### Import the Genesys Cloud data actions
 
