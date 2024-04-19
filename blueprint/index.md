@@ -49,53 +49,55 @@ The following illustration shows the end-to-end user experience that this soluti
 
 1. Navigate to **Admin** > **Roles/Permissions** and click **Add Role**.
 2. Type a **Name** for your custom role. (Example: "Blacklist Callers")
-3. Search and select the **Integrations**>**Action**>**All Permissions** permissions
-4. Search and select the **OAuth**>**Client**>**All Permissions** permissions
-5. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
-6. Click **Save** to assign the appropriate permissions to your custom role.
+3. Search and select the **Architect**>**Datatable**>**All Permissions** permissions
+4. Search and select the **Architect**>**Datatable Row**>**All Permissions** permissions
+5. Search and select the **Integrations**>**Action**>**All Permissions** permissions
+6. Search and select the **OAuth**>**Client**>**All Permissions** permissions
+7. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
+8. Click **Save** to assign the appropriate permissions to your custom role.
    ![Add a custom role](images/createRole.png "Add a custom role")
 
 ## Data Table
-1. First you will want to create a data table. Example name can be “Blacklist”. 
+
+### Create a Data Table
+1. Go to **Admin**>**Architect**>**Data Table**
+2. First you will want to create a data table. Example name can be “Blacklist”. 
 2. You will then primarily need to have the Reference Key set as "ani". 
+3. Click "Save"
+   ![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
 
-![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
+### Add your Blacklist Numbers (to block incoming calls/queues)
+1. Open your Data Table
+2. Press "+" in the top right corner of the screen. 
+3. Under the ani header column, you will store all the phone numbers you wish to block from incoming calls or queues.
+4. Click "Save" 
+NOTE: The phone numbers need to be formatted using e.164 without the "+", for example; 17705551234. This also allows for CSV import without many formatting issues. More information on this below. 
+   ![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
 
-NOTE: Under the ani header column, you will store all the phone numbers you wish to block from incoming calls or queues.
+## Data Action
+
+You will need to create a Genesys Cloud data action that will be used for disconnecting interactions. This can be called “Disconnect interaction”. To set up the data action, make sure you already have an active Genesys Cloud data actions integration setup and follow the steps below or import the action in your ORG.
 
 ### Create an OAuth client for use with a Genesys Cloud data action integration
 
 To enable a Genesys Cloud data action to make public API requests on behalf of your Genesys Cloud organization, use an OAuth client to configure authentication with Genesys Cloud.
 
-Create an OAuth client for use with the data action integration with the following custom roles.
-:::primary
-**Note:** OAuth Client 2 is only required if you would still like GC users to make Communicate/PBX calls to other GC users.
-:::
+Create an OAuth client for use with the data action integration with the following custom role.
 
-
-| OAuth Client   | Custom role | OAuth Client Name |
-|----------------|-------------------------------|-------|
-| OAuth Client 1 | Terminate Conversation Public API | Terminate Conversation Public API |
-| OAuth Client 2 | Get Conversation Details Public API | Get Conversation Details Public API |
-
+| Custom role | OAuth Client Name |
+|-----------------|-------|
+| Blacklist Callers | Disconnect interaction |
 
 To create an OAuth Client in Genesys Cloud:
 
 1. Navigate to **Admin** > **Integrations** > **OAuth** and click **Add Client**.
 
-   ![Add an OAuth client](images/2AAddOAuthClient.png "Add an OAuth client")
-
 2. Enter the name for the OAuth client and select **Client Credentials** as the grant type. Click the **Roles** tab and assign the required role for the OAuth client.
-
-   ![Select the custom role and the grant type](images/2BOAuthClientSetup2.png "Select the custom role and the grant type")
 
 3. Click **Save**. Copy the client ID and the client secret values for later use.
 
-   ![Copy the client ID and client secret values](images/2COAuthClientCredentials2.png "Copy the client ID and client secret values")
-
-   :::primary
+   ![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
    **Note:** Ensure that you copy the client ID and client secret values for each of the OAuth clients.
-   :::
 
 ### Add Genesys Cloud data action integration
 
