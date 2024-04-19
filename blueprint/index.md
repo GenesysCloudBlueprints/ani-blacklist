@@ -186,7 +186,7 @@ NEED NEW IMAGE
 4. From the Trigger single view input **Topic Name**, **Workflow Target**, and **Data Format** as mentioned in the table below.  
 
 | Topic Name | Workflow Target | Data Format |
-|------------|-----------------|-------------|
+|---------------------------------------------------|-----------|--------------------|
 | v2.detail.events.conversation.{id}.customer.start | Blacklist | TopLevelPrimitives |
 
 5. Click **Add Condition**.  
@@ -195,6 +195,7 @@ NEED NEW IMAGE
   ![Configure Trigger](images/ConfigureTrigger.png "Configure Trigger")
 
 6. From the Trigger single view, input **JSON Path**, **Operator**, and **Value** as mentioned in the table below. 
+
 | Topic Name | Workflow Target | Data Format |
 |------------|-----------------|-------------|
 | mediaType | Equals(==) | VOICE |
