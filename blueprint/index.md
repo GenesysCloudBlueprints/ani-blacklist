@@ -102,104 +102,62 @@ To create an OAuth Client in Genesys Cloud:
 ### Add Genesys Cloud data action integration
 
 Add a Genesys cloud data action integration for each OAuth client being used with this blueprint to call the Genesys Cloud public API to:
-* Terminate an outbound conversation that does not have a Queue ID
-* Add an External Tag to conversations terminated due to missing Queue ID
-* Optional: Check to see if the outbound call is to another GC user
-
-:::primary
-**Note:** The optional 3rd bullet requires a second data action integration be created associated to OAuth Client 2 mentioned earlier in this blueprint.
-:::
+* Terminate an inbound blacklisted caller
 
 To create a data action integration in Genesys Cloud:
 
 1. Navigate to **Admin** > **Integrations** > **Integrations** and install the **Genesys Cloud Data Actions** integration. For more information, see [About the data actions integrations](https://help.mypurecloud.com/?p=209478 "Opens the About the data actions integrations article") in the Genesys Cloud Resource Center.
 
-   ![Genesys Cloud data actions integration](images/3AGenesysCloudDataActionInstall.png "Genesys Cloud data actions integration")
-
 2. Enter a name for the Genesys Cloud data action, such as Update Genesys Cloud User Presence in this blueprint solution.
-
-   ![Rename the data action](images/3BRenameDataAction.png "Rename the data action")
 
 3. On the **Configuration** tab, click **Credentials** and then click **Configure**.
 
-   ![Navigate to the OAuth credentials](images/3CAddOAuthCredentials.png "Navigate to the OAuth credentials")
-
 4. Enter the client ID and client secret that you saved for the Presence Public API [(OAuth Client 1)](#create-oauth-clients-for-use-with-genesys-cloud-data-action-integrations "Goes to the create an OAuth Client section"). Click **OK** and save the data action.
 
-   ![Add OAuth client credentials](images/3DOAuthClientIDandSecret.png "Add OAuth client credentials")
-
 5. Navigate to the Integrations page and set the presence data action integration to **Active**.
-
+   ![Genesys Cloud data actions integration](images/3AGenesysCloudDataActionInstall.png "Genesys Cloud data actions integration")
+   ![Rename the data action](images/3BRenameDataAction.png "Rename the data action")
+   ![Navigate to the OAuth credentials](images/3CAddOAuthCredentials.png "Navigate to the OAuth credentials")
+   ![Add OAuth client credentials](images/3DOAuthClientIDandSecret.png "Add OAuth client credentials")
    ![Set the data integration to active](images/3ESetToActive.png "Set the data action integration to active")
+   NOTE: REPLACE ALL THESE SCREENSHOTS WITH GIF
 
 ### Import the Genesys Cloud data actions
 
-Import the following JSON files from the [terminate-voice-calls-with-no-queue repo](https://github.com/GenesysCloudBlueprints/terminate-voice-calls-with-no-queue/exports) GitHub repository:
-* `Disconnect-Voice-Call.custom.json`
-* `Put-Conversation-Tag.custom.json`
-* Optional: `Check-Conversation-For-PSTN-Leg.custom.json`
-
-:::primary
-**Note:** The optional 3rd data action is required if you would still like GC users to make Communicate PBX calls to one another. This data action checks to see if the conversation has an external call leg to the PSTN.  Repeat Steps 1-3 below with the `Check-Conversation-For-PSTN-Leg.custom.json` data action if you'd like to import this optional data action.  Be sure to associate with the Data Action Integration associated with the `Get Conversation Details Public API OAuth Client 2` mentioned earlier in this blueprint.
-:::
-
-Import the `Disconnect-Voice-Call.custom.json` and `Put-Conversation-Tag.custom.json` files and associate with the Terminate Outbound Conversations With No Queue ID data action integration, which uses the Terminate Conversation Public API OAuth client.
-
-1. From the [terminate-voice-calls-with-no-queue repo](https://github.com/GenesysCloudBlueprints/terminate-voice-calls-with-no-queue/exports) GitHub repository, download the `Disconnect-Voice-Call.custom.json` file.
-
+1. Download the `Disconnect-Interaction.custom.json` JSON file from the [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist/exports) GitHub repository.
 2. In Genesys Cloud, navigate to **Integrations** > **Actions** and click **Import**.
-
-   ![Import the data action](images/4AImportDataActions.png "Import the data action")
-
-3. Select the `Disconnect-Voice-Call.custom.json` file and associate with the [Terminate Outbound Conversations With No Queue ID](#add-genesys-cloud-data-action-integrations "Goes to the Add Genesys Cloud data action integrations section") integration, and then click **Import Action**.
+3. Select the `Disconnect-Interaction.json` file and associate with "Disconnect Interaction" data action integration, which uses the Disconnect Interaction Public API OAuth client.
+4. click **Import Action**.
 
    ![Import the Disconnect Voice Call data action](images/4BImportDisconnectVoiceCallDataAction.png "Import the Update Genesys Cloud User Presence data action")
-
-
-4. From the [terminate-voice-calls-with-no-queue repo](https://github.com/GenesysCloudBlueprints/terminate-voice-calls-with-no-queue/exports) GitHub repository, download the `Put-Conversation-Tag.custom.json` file.
-
-5. In Genesys Cloud, navigate to **Integrations** > **Actions** and click **Import**.
-
    ![Import the data action](images/4AImportDataActions.png "Import the data action")
-
-6. Select the `Put-Conversation-Tag.custom.json`file and associate it with the [Terminate Outbound Conversations With No Queue ID](#add-genesys-cloud-data-action-integrations "Goes to the Add Genesys Cloud data action integrations section") integration, and then click **Import Action**.
-
    ![Import the Update Genesys Cloud User Presence data action](images/4BImportPutConversationTagDataAction2.png "Import the Inbound Conversation Details data action")
 
 ### Import the Architect workflows
 
-This solution includes one Architect workflow that uses the two [data actions](#add-genesys-cloud-data-action-integrations "Goes to the Add a web services data actions integration section"). This workflow terminates an outbound phone call if it does have have a Queue ID and updates the External Tag on the conversation record to "No Queue".
+This solution includes one Architect workflow that uses the two [data actions](#add-genesys-cloud-data-action-integrations "Goes to the Add a web services data actions integration section"). This workflow terminates an inbound phone call if it does have have a Queue ID and updates the External Tag on the conversation record to "No Queue".
 
-* The **Terminate Outbound Call Missing Queue.i3WorkFlow** workflow is triggered when a Genesys Cloud user makes a Communicate call. This workflow terminates an outbound phone call if it does have have a Queue ID and updates the External Tag on the conversation record to "No Queue".
+* The **Blacklist_v5-0.i3WorkFlow** workflow is triggered when a blacklisted caller dials to Genesys Cloud communicate user. This workflow terminates an inbound phone call if it matches the phone number from the Data Table. 
 
 The Event Orchestration trigger invokes these workflows. The workflows in turn calls the Disconnect Voice Call and Put Conversation Tag data actions to update the outbound phone call.
 
 First import this workflow to your Genesys Cloud organization:
 
-1. Download the `Terminate Outbound Call Missing Queue.i3WorkFlow` file from the [terminate-voice-calls-with-no-queue repo](https://github.com/GenesysCloudBlueprints/terminate-voice-calls-with-no-queue/exports) GitHub repository.
-
-   :::primary
-   **Note:** If you would like to still allow Communicate/PBX calls between GC Users, use the `Terminate Outbound Call Missing Queue with PSTN Call Leg Check.i3WorkFlow` file.
-   :::
+1. Download the `Blacklist_v5-0.i3WorkFlow` file from the [ani-blacklist repo](https://github.com/GenesysCloudBlueprints/ani-blacklist) GitHub repository.
 
 2. In Genesys Cloud, navigate to **Admin** > **Architect** > **Flows:Workflow** and click **Add**.
 
-   ![Import the workflow](images/AddWorkflow1.png "Import the workflow")
-
 3. Enter a name for the workflow and click **Create Flow**.
-
-   ![Name your workflow](images/NameWorkflow1.png "Name your workflow")
 
 4. From the **Save** menu, click **Import**.
 
-   ![Import the workflow](images/ImportWorkflow1.png "Import the workflow")
-
-5. Select the downloaded **Terminate Outbound Call Missing Queue.i3WorkFlow** file and click **Import**.
-
-   ![Import your workflow file](images/SelectWorkflow1ImportFile.png "Import your workflow file")
+5. Select the downloaded **Blacklist_v5-0.i3WorkFlow** file and click **Import**.
 
 6. Review your workflow. Click **Save** and then click **Publish**.
-
+   ![Import the workflow](images/AddWorkflow1.png "Import the workflow")
+   ![Name your workflow](images/NameWorkflow1.png "Name your workflow")
+   ![Import the workflow](images/ImportWorkflow1.png "Import the workflow")
+   ![Import your workflow file](images/SelectWorkflow1ImportFile.png "Import your workflow file")
    ![Save your workflow](images/ImportedWorkflow1.png "Save your workflow")
 
    :::primary
