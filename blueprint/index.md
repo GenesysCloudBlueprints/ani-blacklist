@@ -12,7 +12,7 @@ This Genesys Cloud Developer Blueprint explains how to set up a trigger to check
  
 When an Architect workflow receives a Communicate call trigger, multiple Genesys Cloud Public API calls are made to assess if a blacklisted number is inbound calling and then terminate the call accordingly.
 
-![Outbound Communicate call Genesys Cloud flow](images/ani-blacklist-workflow.png "Genesys Cloud Outbound Communicate Call")
+![Inbound Communicate call Genesys Cloud flow](images/ani-blacklist-workflow.png "Genesys Cloud Inbound Communicate Call")
 
 The following illustration shows the end-to-end user experience that this solution enables.
 
