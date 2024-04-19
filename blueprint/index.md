@@ -44,7 +44,7 @@ The following illustration shows the end-to-end user experience that this soluti
 
 ## Configure Genesys Cloud
 
-### Create a custom role to use with Genesys Cloud OAuth clients
+### Create a custom role & assign permissions to use with Genesys Cloud OAuth clients
 
 1. Navigate to **Admin** > **Roles/Permissions** and click **Add Role**.
 2. Type a **Name** for your custom role. (Example: "Blacklist Callers")
@@ -54,7 +54,7 @@ The following illustration shows the end-to-end user experience that this soluti
 6. Search and select the **OAuth**>**Client**>**All Permissions** permissions
 7. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
 8. Click **Save** to assign the appropriate permissions to your custom role.
-   ![Add a custom role](images/createRole.png "Add a custom role")
+   ![Add a custom role & set permissions](images/createRoles.mp4 "Add a custom role & set permissions")
 
 ## Data Table
 
