@@ -72,7 +72,7 @@ The following illustration shows the end-to-end user experience that this soluti
 3. Under the ani header column, you will store all the phone numbers you wish to block from incoming calls or queues.
 4. Click "Save" 
 NOTE: The phone numbers need to be formatted using e.164 without the "+", for example; 17705551234. This also allows for CSV import without many formatting issues. More information on this below. 
-   ![End-to-end user experience](images/TerminateCallNoQueue.gif "End-to-end user experience")
+   ![End-to-end user experience](images/add-number-to-blacklist.gif "End-to-end user experience")
 
 ## Data Action
 
@@ -92,7 +92,7 @@ To create an OAuth Client in Genesys Cloud:
 
 1. Navigate to **Admin** > **Integrations** > **OAuth** and click **Add Client**.
 
-2. Enter the name for the OAuth client and select **Client Credentials** as the grant type. Click the **Roles** tab and assign the required role for the OAuth client.
+2. Enter the name (Example: Disconnect Interaction) for the OAuth client and select **Client Credentials** as the grant type. Click the **Roles** tab and assign the required role for the OAuth client.
 
 3. Click **Save**. Copy the client ID and the client secret values for later use.
 
