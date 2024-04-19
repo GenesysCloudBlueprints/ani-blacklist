@@ -124,7 +124,7 @@ To create a data action integration in Genesys Cloud:
 
 ### Import the Genesys Cloud data actions
 
-1. Download the `Disconnect-Interaction.custom.json` JSON file from the [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist/exports) GitHub repository.
+1. Download the `Disconnect-Interaction.json` JSON file from the [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist/exports) GitHub repository.
 2. In Genesys Cloud, navigate to **Integrations** > **Actions** and click **Import**.
 3. Select the `Disconnect-Interaction.json` file and associate with "Disconnect Interaction" data action integration, which uses the Disconnect Interaction Public API OAuth client.
 4. click **Import Action**.
@@ -132,6 +132,8 @@ To create a data action integration in Genesys Cloud:
    ![Import the Disconnect Voice Call data action](images/4BImportDisconnectVoiceCallDataAction.png "Import the Update Genesys Cloud User Presence data action")
    ![Import the data action](images/4AImportDataActions.png "Import the data action")
    ![Import the Update Genesys Cloud User Presence data action](images/4BImportPutConversationTagDataAction2.png "Import the Inbound Conversation Details data action")
+
+## Architect 
 
 ### Import the Architect workflows
 
@@ -160,21 +162,11 @@ First import this workflow to your Genesys Cloud organization:
    ![Import your workflow file](images/SelectWorkflow1ImportFile.png "Import your workflow file")
    ![Save your workflow](images/ImportedWorkflow1.png "Save your workflow")
 
-   :::primary
-   **Note:** If you would like to change the External Tag, replace **No Queue** in the **externalTagName** field with the string of your choice.
-   :::
-
-   :::primary
-   **Note:** If you imported the `Terminate Outbound Call Missing Queue with PSTN Call Leg Check.i3WorkFlow` file, your workflow will look like the screenshot below. 
-   :::
+   **Note:** If you imported the `Blacklist_v5-0.i3WorkFlow` file, your workflow will look like the screenshot below. 
 
    ![Save your workflow](images/ImportedWorkflow2.png "Save your workflow")
 
-   :::primary
-   **Note:** If you imported the `Terminate Outbound Call Missing Queue with PSTN Call Leg Check.i3WorkFlow` file, your workflow will look like the screenshot above.
-   :::
-
-## Create the event orchestration triggers
+## Triggers
 
 Create the trigger that invokes the created Architect workflow.
 
@@ -188,29 +180,33 @@ Create the trigger that invokes the created Architect workflow.
 
 3. From the Add New Trigger modal, name your trigger and click **Add**
 
+NEED NEW IMAGE
    ![Name Trigger](images/NameTrigger.png "Name Trigger")
 
-4. From the Trigger single view, in the **Topic Name** menu, select **v2.detail.events.conversation.{id}.user.start**.  In the **Workflow Target** menu, select **Terminate Outbound Call Missing Queue**.  Leave **Data Format** as **TopLevelPrimitives**.  Click **Add Condition**.  For more information, see [Available Topics](https://developer.genesys.cloud/notificationsalerts/notifications/available-topics "Opens the Available Topics article") in the Genesys Cloud Developer Center.  Using the notification monitoring tool in the Developer Center, you can watch the notifications happen.
+4. From the Trigger single view input **Topic Name**, **Workflow Target**, and **Data Format** as mentioned in the table below.  
+
+| Topic Name | Workflow Target | Data Format |
+|------------|-----------------|-------------|
+| v2.detail.events.conversation.{id}.customer.start | Blacklist | TopLevelPrimitives |
+
+5. Click **Add Condition**.  
+   NOTE: For more information, see [Available Topics](https://developer.genesys.cloud/notificationsalerts/notifications/available-topics "Opens the Available Topics article") in the Genesys Cloud Developer Center. Using the notification monitoring tool in the Developer Center, you can watch the notifications happen.
 
   ![Configure Trigger](images/ConfigureTrigger.png "Configure Trigger")
 
-5. From the Trigger single view, in the **JSON Path** field, type **queueId**.  In the **Operator** menu, select **Exists**.  Set the **Value** toggle to **False**.  Click **Create**.
+6. From the Trigger single view, input **JSON Path**, **Operator**, and **Value** as mentioned in the table below. 
+| Topic Name | Workflow Target | Data Format |
+|------------|-----------------|-------------|
+| mediaType | Equals(==) | VOICE |
+
+7. Click **Save**.
 
    ![Configure Trigger Criteria](images/ConfigureTriggerCriteria.png "Configure Trigger Criteria")
 
-   :::primary
-   **Note:** If you are interested in allowing PBX calls to other GC users, adding the following criteria to your trigger may allow you to use the simpler `Terminate Outbound Call Missing Queue.i3WorkFlow` file for your Architect workflow. This will reduce the amount of time between the trigger firing and the call being disconnected. You can adjust the string in the contains condition to match your business needs. Especially if your agents are calling specific country codes.
-   :::
-
-   ![Additional Trigger Criteria](images/AdditionalTriggerCriteria.png "Additional Trigger Criteria")
-
-6. From the Trigger single view, set the **Active** toggle to **Active**.  Click **Save**.
-
-   ![Activate Trigger](images/ActivateTrigger.png "Activate Trigger")
-
+## You can now add numbers to the Blacklist Data Table under the ani column header and those callers will be disconnected when they try calling you.  
 
 ## Additional resources
 
 * [Genesys Cloud API Explorer](https://developer.genesys.cloud/devapps/api-explorer "Opens the GC API Explorer") in the Genesys Cloud Developer Center
 * [Genesys Cloud notification triggers](https://developer.genesys.cloud/notificationsalerts/notifications/available-topics "Opens the Available topics page") in the Genesys Cloud Developer Center
-* The [terminate-voice-calls-with-no-queue repo](https://github.com/GenesysCloudBlueprints/terminate-voice-calls-with-no-queue) repository in GitHub
+* The [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist) repository in GitHub
