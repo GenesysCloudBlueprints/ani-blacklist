@@ -151,11 +151,12 @@ First import this workflow to your Genesys Cloud organization:
 5. Select the downloaded **Blacklist_v5-0.i3WorkFlow** file and click **Import**.
 
 6. Review your workflow. Click **Save** and then click **Publish**.
+   
    ![Import the workflow](images/architect-workflows.gif "Import the workflow")
 
-   **Note:** If you imported the `Blacklist_v5-0.i3WorkFlow` file, your workflow will look like the screenshot below. 
+   **Note:** If you imported the `Blacklist_v5-0.i3WorkFlow` file, your workflow will look like the flow below. 
 
-   ![Save your workflow](images/full-architect-workflow.gif "Save your workflow")
+   ![full architect workflow](images/full-architect-workflow.gif "full architect workflow")
 
 ## Triggers
 
@@ -163,16 +164,9 @@ Create the trigger that invokes the created Architect workflow.
 
 1. From Admin Home, search for **Triggers** and navigate to the Triggers list.
 
-   ![Navigate to Triggers](images/NavigateToTriggers.png "Navigate to Triggers")
-
 2. From the Triggers list, click **Add Trigger**
 
-   ![Add Trigger](images/AddTrigger.png "Add Trigger")
-
 3. From the Add New Trigger modal, name your trigger and click **Add**
-
-NEED NEW IMAGE
-   ![Name Trigger](images/NameTrigger.png "Name Trigger")
 
 4. From the Trigger single view input **Topic Name**, **Workflow Target**, and **Data Format** as mentioned in the table below.  
 
@@ -183,8 +177,6 @@ NEED NEW IMAGE
 5. Click **Add Condition**.  
    NOTE: For more information, see [Available Topics](https://developer.genesys.cloud/notificationsalerts/notifications/available-topics "Opens the Available Topics article") in the Genesys Cloud Developer Center. Using the notification monitoring tool in the Developer Center, you can watch the notifications happen.
 
-  ![Configure Trigger](images/ConfigureTrigger.png "Configure Trigger")
-
 6. From the Trigger single view, input **JSON Path**, **Operator**, and **Value** as mentioned in the table below. 
 
 | Topic Name | Workflow Target | Data Format |
@@ -193,7 +185,7 @@ NEED NEW IMAGE
 
 7. Click **Save**.
 
-   ![Configure Trigger Criteria](images/ConfigureTriggerCriteria.png "Configure Trigger Criteria")
+   ![Configure Trigger](images/trigger.gif "Configure Trigger")
 
 ### You can now add numbers to the Blacklist Data Table under the ani column header and those callers will be disconnected when they try calling you.  
 
