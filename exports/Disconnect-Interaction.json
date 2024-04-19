@@ -1,16 +1,15 @@
 {
-  "name": "Put Conversation Tag",
+  "name": "Disconnect Interaction",
   "integrationType": "purecloud-data-actions",
   "actionType": "custom",
   "config": {
     "request": {
-      "requestUrlTemplate": "/api/v2/conversations/${input.conversationId}/tags",
-      "requestType": "PUT",
+      "requestUrlTemplate": "/api/v2/conversations/${input.conversationId}/disconnect",
+      "requestType": "POST",
       "headers": {
-        "Content-Type": "application/json",
         "UserAgent": "PureCloudIntegrations/1.0"
       },
-      "requestTemplate": "{\n  \"externalTag\": \"${input.externalTagName}\"\n}"
+      "requestTemplate": "${input.rawRequest}"
     },
     "response": {
       "translationMap": {},
@@ -21,13 +20,9 @@
   "contract": {
     "input": {
       "inputSchema": {
-        "title": "Input",
         "type": "object",
         "properties": {
           "conversationId": {
-            "type": "string"
-          },
-          "externalTagName": {
             "type": "string"
           }
         },
