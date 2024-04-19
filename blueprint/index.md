@@ -54,7 +54,8 @@ The following illustration shows the end-to-end user experience that this soluti
 6. Search and select the **OAuth**>**Client**>**All Permissions** permissions
 7. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
 8. Click **Save** to assign the appropriate permissions to your custom role.
-   ![Add a custom role & set permissions](images/createRoles.mp4 "Add a custom role & set permissions")
+
+   ![Add a custom role & set permissions](images/createRoles.gif "Add a custom role & set permissions")
 
 ## Data Table
 
