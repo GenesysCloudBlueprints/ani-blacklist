@@ -71,7 +71,9 @@ The following illustration shows the end-to-end user experience that this soluti
 2. Press "+" in the top right corner of the screen. 
 3. Under the ani header column, you will store all the phone numbers you wish to block from incoming calls or queues.
 4. Click "Save" 
-NOTE: The phone numbers need to be formatted using e.164 without the "+", for example; 17705551234. This also allows for CSV import without many formatting issues. More information on this below. 
+
+   NOTE: The phone numbers need to be formatted using e.164 without the "+", for example; 17705551234. This also allows for CSV import without many formatting issues. More information on this below. 
+
    ![End-to-end user experience](images/add-number-to-blacklist.gif "End-to-end user experience")
 
 ## Data Action
@@ -82,11 +84,7 @@ You will need to create a Genesys Cloud data action that will be used for discon
 
 To enable a Genesys Cloud data action to make public API requests on behalf of your Genesys Cloud organization, use an OAuth client to configure authentication with Genesys Cloud.
 
-Create an OAuth client for use with the data action integration with the following custom role.
-
-| Custom role | OAuth Client Name |
-|-----------------|-------|
-| Blacklist Callers | Disconnect interaction |
+Create an OAuth client to use with the data action integration with a custom role.
 
 To create an OAuth Client in Genesys Cloud:
 
@@ -113,16 +111,17 @@ To create a data action integration in Genesys Cloud:
 
 3. On the **Configuration** tab, click **Credentials** and then click **Configure**.
 
-4. Enter the client ID and client secret that you saved for the Presence Public API [(OAuth Client 1)](#create-oauth-clients-for-use-with-genesys-cloud-data-action-integrations "Goes to the create an OAuth Client section"). Click **OK** and save the data action.
+4. Enter the client ID and client secret that you saved for the Presence Public API (OAuth Client 1). Click **OK** and save the data action.
 
 5. Navigate to the Integrations page and set the presence data action integration to **Active**.
+
    ![create data action](images/create-data-action.gif "create data action")
 
 
 ### Import the Genesys Cloud data actions
 
 1. Download the `Disconnect-Interaction.json` JSON file from the [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist/exports) GitHub repository.
-2. In Genesys Cloud, navigate to **Integrations** > **Actions** and click **Import**.
+2. In Genesys Cloud, navigate to **Admin** > **Integrations** > **Actions** and click **Import**.
 3. Select the `Disconnect-Interaction.json` file and associate with "Disconnect Interaction" data action integration, which uses the Disconnect Interaction Public API OAuth client.
 4. click **Import Action**.
 
