@@ -159,6 +159,45 @@ First import this workflow to your Genesys Cloud organization:
 
    ![full architect workflow](images/full-architect-workflow.gif "full architect workflow")
 
+### Alternatively, you can build your own workflowflow.
+
+1. Create a Workflow by going to **Architect** -> **flows** -> **Workflow** (Under Supporting flows). Add a new Workflow. You can call it “Blacklist”.  
+NOTE:  Under Resources > Data, you will need to add two variables: "ani", "conversationId". 
+
+2. First you will want to add a “Set Conversation Data” Block. You will need to set 2 attributes.  
+
+| Attribute Name | Value to Assign |
+|-------------------|----------------------------------|
+| TECH_Workflow_ANI | Flow.ani |
+| TECH_Workflow_ANI_number | Replace(ToString(ToPhoneNumber(flow.Ani).e164), "+","") |
+
+3. You will want to create a decision block, to make sure the callers CLI isn’t unknown, blank or someone isn’t calling internally in Genesys. 
+
+| Name | Value to Assign |
+|-------------------|----------------------------------|
+| Decision | contains(Lower(Flow.ani),"anonymous") or contains(Lower(Flow.ani),"unknown") or IsNotSetOrEmpty(Flow.ani) or Contains(Flow.ani,"localhost") or Contains(Flow.ani,"sip") |
+
+4. If the caller’s number is shown, it will do a data table lookup (Blacklist data table). If found, we use the data action to disconnect the call (Disconnect interaction data action). Once the call has been disconnected then we use the “Set Conversation Data” block to out the call has been disconnected.
+
+| Inputs for the Data Table Lookup | Value to Assign |
+|-------------------|----------------------------------|
+| ani | Replace(ToString(ToPhoneNumber(flow.Ani).e164), "+","") |
+
+NOTE: This function allows to lookup numbers from any country with the number formatting being e.164 without the plus.
+
+5. Inputs for the Data Action
+
+| Inputs for the Data Action | Value to Assign |
+|-------------------|----------------------------------|
+| conversationId | Flow.conversationId |
+
+6. Attribute name for setting the Conversation Data
+
+| Attribute Name for setting the Conversation Data | Value to Assign |
+|-------------------|----------------------------------|
+| TECH_Blacklisted | True |
+
+
 ## Triggers
 
 Create the trigger that invokes the created Architect workflow.
