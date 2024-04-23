@@ -1,16 +1,16 @@
 ---
 title: Blacklisting Phone Numbers
-author: yuri.yeti
+author: barrez.bert
 indextype: blueprint
 icon: blueprint
 image: images/CallBlacklist.gif
 category: 4
 summary: |
-  This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on a voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This features prevents inbound unwanted or fraudelent calls.
+  This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on an inbound voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This features prevents inbound unwanted or fraudelent calls.
 ---
-This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on a voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This features prevents inbound unwanted or fraudelent calls.
+This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on an inbound voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This functionality prevents unwanted or fraudulent inbound calls.
  
-When an Architect workflow receives a Communicate call trigger, multiple Genesys Cloud Public API calls are made to assess if a blacklisted number is inbound calling and then terminate the call accordingly.
+When an Architect workflow receives a customer call trigger, multiple Genesys Cloud Public API calls are made to assess if a blacklisted number is inbound calling and then terminate the call accordingly.
 
 ![Inbound Communicate call Genesys Cloud flow](images/ani-blacklist-workflow.png "Genesys Cloud Inbound Communicate Call")
 
@@ -26,7 +26,6 @@ The following illustration shows the end-to-end user experience that this soluti
 * **Data Action** - Provides the integration point to invoke a third-party REST web service or AWS lambda.
 * **Architect flows** - A flow in Architect, a drag and drop web-based design tool, dictates how Genesys Cloud handles inbound or outbound interactions.
 * **Triggers** - Provides the ability for a data action and architect workflow to work cohisively to perform the task.
-* **CX as Code** - A Genesys Cloud Terraform provider that provides an interface for declaring core Genesys Cloud objects.
 
 ## Prerequisites
 
@@ -34,13 +33,11 @@ The following illustration shows the end-to-end user experience that this soluti
 
 * Administrator-level knowledge of Genesys Cloud
 * Expereince with REST API authentication
-* Experience with Postman
 
 ### Genesys Cloud account
 
 * A Genesys Cloud CX 1 license. For more information, see [Genesys Cloud Pricing](https://www.genesys.com/pricing "Opens the Genesys Cloud pricing article").
 * The Master Admin role in Genesys Cloud. For more information, see [Roles and permissions overview](https://help.mypurecloud.com/?p=24360 "Opens the Roles and permissions overview article") in the Genesys Cloud Resource Center.
-* CX as Code. For more information, see [CX as Code](https://developer.genesys.cloud/devapps/cx-as-code/ "Goes to the CX as Code page") in the Genesys Cloud Developer Center.
 
 ## Configure Genesys Cloud
 
@@ -50,10 +47,8 @@ The following illustration shows the end-to-end user experience that this soluti
 2. Type a **Name** for your custom role. (Example: "Blacklist Callers")
 3. Search and select the **Architect**>**Datatable**>**All Permissions** permissions
 4. Search and select the **Architect**>**Datatable Row**>**All Permissions** permissions
-5. Search and select the **Integrations**>**Action**>**All Permissions** permissions
-6. Search and select the **OAuth**>**Client**>**All Permissions** permissions
-7. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
-8. Click **Save** to assign the appropriate permissions to your custom role.
+5. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
+6. Click **Save** to assign the appropriate permissions to your custom role.
 
    ![Add a custom role & set permissions](images/createRoles.gif "Add a custom role & set permissions")
 
@@ -67,7 +62,7 @@ The following illustration shows the end-to-end user experience that this soluti
 
    ![create a data table](images/datatable.gif "create a data table")
 
-### Add your Blacklist Numbers (to block incoming calls/queues)
+### Add your Blacklist Numbers (to block incoming calls)
 1. Open your Data Table
 2. Press "+" in the top right corner of the screen. 
 3. Under the ani header column, you will store all the phone numbers you wish to block from incoming calls or queues.
@@ -79,7 +74,7 @@ The following illustration shows the end-to-end user experience that this soluti
 
 ## Data Action
 
-You will need to create a Genesys Cloud data action that will be used for disconnecting interactions. This can be called “Disconnect interaction”. To set up the data action, make sure you already have an active Genesys Cloud data actions integration setup and follow the steps below or import the action in your ORG.
+You will need to create a Genesys Cloud data action that will be used for disconnecting interactions. This can be called “Disconnect interaction”. 
 
 ### Create an OAuth client for use with a Genesys Cloud data action integration
 
@@ -108,20 +103,20 @@ To create a data action integration in Genesys Cloud:
 
 1. Navigate to **Admin** > **Integrations** > **Integrations** and install the **Genesys Cloud Data Actions** integration. For more information, see [About the data actions integrations](https://help.mypurecloud.com/?p=209478 "Opens the About the data actions integrations article") in the Genesys Cloud Resource Center.
 
-2. Enter a name for the Genesys Cloud data action, such as Update Genesys Cloud User Presence in this blueprint solution.
+2. Enter a name for the Genesys Cloud data action, such as "Disconnect Interaction" in this blueprint solution.
 
 3. On the **Configuration** tab, click **Credentials** and then click **Configure**.
 
-4. Enter the client ID and client secret that you saved for the Presence Public API (OAuth Client 1). Click **OK** and save the data action.
+4. Enter the client ID and client secret that you saved for the Public API (OAuth Client 1). Click **OK** and save the data action.
 
-5. Navigate to the Integrations page and set the presence data action integration to **Active**.
+5. Navigate to the Integrations page and set the data action integration to **Active**.
 
    ![create data action](images/create-data-action.gif "create data action")
 
 
 ### Import the Genesys Cloud data actions
 
-1. Download the `Disconnect-Interaction.json` JSON file from the [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist/exports) GitHub repository.
+1. Download the `Disconnect-Interaction.json` JSON file from the [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist) GitHub repository.
 2. In Genesys Cloud, navigate to **Admin** > **Integrations** > **Actions** and click **Import**.
 3. Select the `Disconnect-Interaction.json` file and associate with "Disconnect Interaction" data action integration, which uses the Disconnect Interaction Public API OAuth client.
 4. click **Import Action**.
@@ -133,15 +128,13 @@ To create a data action integration in Genesys Cloud:
 
 ### Import the Architect workflows
 
-This solution includes one Architect workflow that uses the two [data actions](#add-genesys-cloud-data-action-integrations "Goes to the Add a web services data actions integration section"). This workflow terminates an inbound phone call if it does have have a Queue ID and updates the External Tag on the conversation record to "No Queue".
+This solution includes one Architect workflow that uses one [data action](#add-genesys-cloud-data-action-integrations "Goes to the Add a web services data actions integration section"). 
 
-* The **Blacklist_v5-0.i3WorkFlow** workflow is triggered when a blacklisted caller dials to Genesys Cloud communicate user. This workflow terminates an inbound phone call if it matches the phone number from the Data Table. 
-
-The Event Orchestration trigger invokes these workflows. The workflows in turn calls the Disconnect Voice Call and Put Conversation Tag data actions to update the outbound phone call.
+* The **Blacklist.i3WorkFlow** workflow is triggered when a blacklisted caller dials to Genesys Cloud communicate user. This workflow terminates an inbound phone call if it matches the phone number from the Data Table. 
 
 First import this workflow to your Genesys Cloud organization:
 
-1. Download the `Blacklist_v5-0.i3WorkFlow` file from the [ani-blacklist repo](https://github.com/GenesysCloudBlueprints/ani-blacklist) GitHub repository.
+1. Download the `Blacklist.i3WorkFlow` file from the [ani-blacklist repo](https://github.com/GenesysCloudBlueprints/ani-blacklist) GitHub repository.
 
 2. In Genesys Cloud, navigate to **Admin** > **Architect** > **Flows:Workflow** and click **Add**.
 
@@ -149,13 +142,13 @@ First import this workflow to your Genesys Cloud organization:
 
 4. From the **Save** menu, click **Import**.
 
-5. Select the downloaded **Blacklist_v5-0.i3WorkFlow** file and click **Import**.
+5. Select the downloaded **Blacklist.i3WorkFlow** file and click **Import**.
 
 6. Review your workflow. Click **Save** and then click **Publish**.
    
    ![Import the workflow](images/architect-workflows.gif "Import the workflow")
 
-   **Note:** If you imported the `Blacklist_v5-0.i3WorkFlow` file, your workflow will look like the flow below. 
+   **Note:** If you imported the `Blacklist.i3WorkFlow` file, your workflow will look like the flow below. 
 
    ![full architect workflow](images/full-architect-workflow.gif "full architect workflow")
 
