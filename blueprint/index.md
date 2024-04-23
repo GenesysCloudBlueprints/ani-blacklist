@@ -45,10 +45,8 @@ The following illustration shows the end-to-end user experience that this soluti
 
 1. Navigate to **Admin** > **Roles/Permissions** and click **Add Role**.
 2. Type a **Name** for your custom role. (Example: "Blacklist Callers")
-3. Search and select the **Architect**>**Datatable**>**All Permissions** permissions
-4. Search and select the **Architect**>**Datatable Row**>**All Permissions** permissions
-5. Search and select the **processautomation**>**trigger**>**All Permissions** permissions
-6. Click **Save** to assign the appropriate permissions to your custom role.
+3. Search and select the **Conversation**>**Communication**>**Disconnect** permissions
+4. Click **Save** to assign the appropriate permissions to your custom role.
 
    ![Add a custom role & set permissions](images/createRoles.gif "Add a custom role & set permissions")
 
