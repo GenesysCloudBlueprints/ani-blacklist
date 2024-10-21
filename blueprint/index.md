@@ -3,7 +3,7 @@ title: Blacklisting Phone Numbers
 author: barrez.bert
 indextype: blueprint
 icon: blueprint
-image: images/CallBlacklist.gif
+image: images/overview.png
 category: 4
 summary: |
   This Genesys Cloud Developer Blueprint explains how to set up a trigger to check if an ANI on an inbound voice interaction is blacklisted. If it is blacklisted, the call will be disconnected. This features prevents inbound unwanted or fraudelent calls.
@@ -12,7 +12,7 @@ This Genesys Cloud Developer Blueprint explains how to set up a trigger to check
  
 When an Architect workflow receives a customer call trigger, multiple Genesys Cloud Public API calls are made to assess if a blacklisted number is inbound calling and then terminate the call accordingly.
 
-![Inbound Communicate call Genesys Cloud flow](images/ani-blacklist-workflow.png "Genesys Cloud Inbound Communicate Call")
+![Inbound Communicate call Genesys Cloud flow](images/overview.png "Genesys Cloud Inbound Communicate Call")
 
 The following illustration shows the end-to-end user experience that this solution enables.
 
@@ -39,7 +39,57 @@ The following illustration shows the end-to-end user experience that this soluti
 * A Genesys Cloud CX 1 license. For more information, see [Genesys Cloud Pricing](https://www.genesys.com/pricing "Opens the Genesys Cloud pricing article").
 * The Master Admin role in Genesys Cloud. For more information, see [Roles and permissions overview](https://help.mypurecloud.com/?p=24360 "Opens the Roles and permissions overview article") in the Genesys Cloud Resource Center.
 
-## Configure Genesys Cloud
+## Implementation steps
+
+You can implement Genesys Cloud objects manually or with Terraform.
+* [Configure Genesys Cloud using Terraform](#configure-genesys-cloud-using-terraform)
+* [Configure Genesys Cloud manually](#configure-genesys-cloud-manually)
+
+### Download the repository containing the project files
+
+Clone the [ani-blacklist repository](https://github.com/GenesysCloudBlueprints/ani-blacklist "Goes to the ani-blacklist repository") in GitHub.
+
+## Configure Genesys Cloud using Terraform
+
+### Set up Genesys Cloud
+
+1. Set the following environment variables in a terminal window before you run this project using the Terraform provider:
+
+   * `GENESYSCLOUD_OAUTHCLIENT_ID` - This variable is the Genesys Cloud client credential grant Id that CX as Code executes against. 
+   * `GENESYSCLOUD_OAUTHCLIENT_SECRET` - This variable is the Genesys Cloud client credential secret that CX as Code executes against. 
+   * `GENESYSCLOUD_REGION` - This variable is the Genesys Cloud region in your organization.
+
+2. Set the environment variables in the folder where Terraform is running. 
+
+### Configure your Terraform build
+
+* `client_id` - The value of your OAuth Client ID using Client Credentials to be used for the data action integration.
+* `client_secret`- The value of your OAuth Client secret using Client Credentials to be used for the data action integration.
+
+The following is an example of the dev.auto.tfvars file.
+
+```
+client_id       = "your-client-id"
+client_secret   = "your-client-secret"
+```
+
+### Run Terraform
+
+The blueprint solution is now ready for your organization to use. 
+
+1. Change to the **/terraform** folder and issue the following commands:
+
+   * `terraform init` - This command initializes a working directory containing Terraform configuration files.  
+   * `terraform plan` - This command executes a trial run against your Genesys Cloud organization and displays a list of all the Genesys Cloud resources Terraform created. Review this list and make sure that you are comfortable with the plan before you continue to the next step.
+   * `terraform apply --auto-approve` - This command creates and deploys the necessary objects in your Genesys Cloud account. The `--auto-approve` flag provides the required approval before the command creates the objects.
+
+After the `terraform apply --auto-approve` command successfully completes, you can see the output of the command's entire run along with the number of objects that Terraform successfully created. Keep the following points in mind:
+
+   * This project assumes that you run this blueprint solution with a local Terraform backing state, which means that the `tfstate` files are created in the same folder where you run the project. Terraform recommends that you use local Terraform backing state files **only** if you run from a desktop or are comfortable deleting files.
+
+   * As long as you keep your local Terraform backing state projects, you can tear down this blueprint solution. To tear down the solution, change to the `docs/terraform` folder and issue the  `terraform destroy --auto-approve` command. This command destroys all objects that the local Terraform backing state currently manages.
+
+## Configure Genesys Cloud manually
 
 ### Create a custom role & assign permissions to use with Genesys Cloud OAuth clients
 
@@ -50,9 +100,9 @@ The following illustration shows the end-to-end user experience that this soluti
 
    ![Add a custom role & set permissions](images/createRoles.gif "Add a custom role & set permissions")
 
-## Data Table
+### Data Table
 
-### Create a Data Table
+#### Create a Data Table
 1. Go to **Admin**>**Architect**>**Data Table**
 2. First you will want to create a data table. Example name can be “Blacklist”. 
 2. You will then primarily need to have the Reference Key set as "ani". 
@@ -60,7 +110,7 @@ The following illustration shows the end-to-end user experience that this soluti
 
    ![create a data table](images/datatable.gif "create a data table")
 
-### Add your Blacklist Numbers (to block incoming calls)
+#### Add your Blacklist Numbers (to block incoming calls)
 1. Open your Data Table
 2. Press "+" in the top right corner of the screen. 
 3. Under the ani header column, you will store all the phone numbers you wish to block from incoming calls or queues.
@@ -70,11 +120,11 @@ The following illustration shows the end-to-end user experience that this soluti
 
    ![End-to-end user experience](images/add-number-to-blacklist.gif "End-to-end user experience")
 
-## Data Action
+### Data Action
 
 You will need to create a Genesys Cloud data action that will be used for disconnecting interactions. This can be called “Disconnect interaction”. 
 
-### Create an OAuth client for use with a Genesys Cloud data action integration
+#### Create an OAuth client for use with a Genesys Cloud data action integration
 
 To enable a Genesys Cloud data action to make public API requests on behalf of your Genesys Cloud organization, use an OAuth client to configure authentication with Genesys Cloud.
 
@@ -92,9 +142,9 @@ To create an OAuth Client in Genesys Cloud:
 
    **Note:** Ensure that you **copy the client ID and client secret values** for each of the OAuth clients.
 
-### Add Genesys Cloud data action integration
+#### Add Genesys Cloud data action integration
 
-Add a Genesys cloud data action integration for each OAuth client being used with this blueprint to call the Genesys Cloud public API to:
+Add a Genesys Cloud data action integration for each OAuth client being used with this blueprint to call the Genesys Cloud public API to:
 * Terminate the call of an inbound blacklisted caller
 
 To create a data action integration in Genesys Cloud:
@@ -112,7 +162,7 @@ To create a data action integration in Genesys Cloud:
    ![create data action](images/create-data-action.gif "create data action")
 
 
-### Import the Genesys Cloud data actions
+#### Import the Genesys Cloud data actions
 
 1. Download the `Disconnect-Interaction.json` JSON file from the [ani-blacklist](https://github.com/GenesysCloudBlueprints/ani-blacklist) GitHub repository.
 2. In Genesys Cloud, navigate to **Admin** > **Integrations** > **Actions** and click **Import**.
@@ -122,9 +172,9 @@ To create a data action integration in Genesys Cloud:
 
    ![create data action](images/import-data-actions.gif "create data action")
 
-## Architect 
+### Architect 
 
-### Import the Architect workflows
+#### Import the Architect workflows
 
 This solution includes one Architect workflow that uses one [data action](#add-genesys-cloud-data-action-integrations "Goes to the Add a web services data actions integration section"). 
 
@@ -150,7 +200,7 @@ First import this workflow to your Genesys Cloud organization:
 
    ![full architect workflow](images/full-architect-workflow.gif "full architect workflow")
 
-## Triggers
+### Triggers
 
 Create the trigger that invokes the created Architect workflow.
 
@@ -179,7 +229,7 @@ Create the trigger that invokes the created Architect workflow.
 
    ![Configure Trigger](images/trigger.gif "Configure Trigger")
 
-### You can now add numbers to the Blacklist Data Table under the ani column header and those callers will be disconnected when they try calling you.  
+#### You can now add numbers to the Blacklist Data Table under the ani column header and those callers will be disconnected when they try calling you.  
 
 ## Additional resources
 
