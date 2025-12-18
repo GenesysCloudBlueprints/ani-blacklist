@@ -1,6 +1,5 @@
 resource "genesyscloud_flow" "inbound_call_flow" {
   filepath = "${path.module}/blacklist.yaml"
-  file_content_hash = filesha256("${path.module}/blacklist.yaml")
   substitutions = {
     flow_name               = "Blacklist"
     division                = "Home"
