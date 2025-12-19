@@ -1,2 +1,13 @@
 # macOS Files
 .DS_Store
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# Terraform - exclude entire directory
+terraform/
+
+# History files
+.history/
